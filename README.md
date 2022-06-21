@@ -1,11 +1,10 @@
-<h1 align="center">SearchEngine</h1>
+<h1 align="center">Search Engine</h1>
 
 <div align="center">
     <img src="https://img.shields.io/badge/Java-black?style=for-the-badge&logo=Java" alt="Java"/>
     <img src="https://img.shields.io/badge/Spring-black?style=for-the-badge&logo=Spring" alt="Spring"/>
     <img src="https://img.shields.io/badge/Mysql-black?style=for-the-badge&logo=Mysql" alt="MySQL"/>
 </div>
-<h1></h1>
 
 <h1>Description</h1>
 This project was created for educational purposes to obtain a diploma on the Skillbox educational platform.
@@ -17,7 +16,8 @@ This project was created for educational purposes to obtain a diploma on the Ski
 <h1>About the project</h1>
 <!--Описать функционал подробно со скринами -->
 <!--Возможно приложить структуру БД-->
-The functionality of the program can be divided into three parts:
+I was given a ready-made frontend, my task was to write a backend, and then make friends with them. The functionality
+of the program can be divided into three parts:
 <ul>
     <li>View general statistics about all sites and about each site individually</li>
     <li>Start or stop full indexing, indexing of a single page in the sites that are in the config file</li>
@@ -38,6 +38,9 @@ of the sites.
 <div>
     Detailed statistics include:
     <ul>
+        <li>Name of site - Set in the config</li>
+        <li>Address of site - Set in the config</li>
+        <li>Status - may be is "Indexing", "Indexed" and "Failed"</li>
         <li>Status time - the time of the last change in the status of the site</li>
         <li>Pages - the pages counter of the site</li>
         <li>Lemmas - the lemmas counter of the site</li>
@@ -66,6 +69,9 @@ and when you click on the "Find" button, the search results are displayed.
 <div>If there are more than ten search results, they are displayed in parts (ten results each),
     and the corresponding "Show more" button is displayed at the end of the page.</div>
 <div><img src="https://github.com/coollappsus/SearchEngine/blob/main/assets/SearchShowMore.png?raw=true"></div>
+<h3>Correct error responses</h3>
+In case of exceptions, API methods return correct responses.
+
 
 <h1>Technologies</h1>
 <!--Расписать какие использовались зависимости с версиями-->
