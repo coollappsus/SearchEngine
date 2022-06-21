@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,12 +27,15 @@ public class StatisticService {
     private final LemmaService lemmaService;
     private final PageService pageService;
     private final SiteProperties properties;
+    private final SiteService siteService;
 
     @Autowired
-    public StatisticService(LemmaService lemmaService, PageService pageService, SiteProperties properties) {
+    public StatisticService(LemmaService lemmaService, PageService pageService, SiteProperties properties,
+                            SiteService siteService) {
         this.lemmaService = lemmaService;
         this.pageService = pageService;
         this.properties = properties;
+        this.siteService = siteService;
     }
 
     public StatisticsDto.Total createTotal() {
@@ -67,5 +71,21 @@ public class StatisticService {
         int lemmasCount = lemmaService.getCountBySiteId(siteId);
         return new StatisticsDto.Detailed(site.getUrl(), site.getName(), (Status) site.getStatus(),
                 site.getStatusTime(), site.getLastError(), pagesCount, lemmasCount);
+    }
+
+    public StatisticsDto getStatistics() {
+        ArrayList<Site> siteList = siteService.getAll();
+        List<SiteProperties.SiteData> sites = properties.getList();
+        ArrayList<StatisticsDto.Detailed> detailedList = new ArrayList<>();
+        siteService.checkOfExistenceAndDelete();
+        if (siteList.size() != sites.size()) {
+            siteService.create();
+        }
+        for (Site site : siteList) {
+            StatisticsDto.Detailed detailed = createDetailed(site);
+            detailedList.add(detailed);
+        }
+        StatisticsDto.Statistics statistics = new StatisticsDto.Statistics(createTotal(), detailedList);
+        return new StatisticsDto(statistics);
     }
 }

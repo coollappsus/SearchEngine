@@ -1,18 +1,34 @@
 package main.service;
 
+import main.controllers.properties.SiteProperties;
+import main.dto.ResultDto;
+import main.dto.SearchDto;
 import main.model.FoundPage;
+import main.service.search.Search;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FoundPageService {
 
+    private final IndexService indexService;
+    private final SiteProperties properties;
+    private final PageService pageService;
+    private final LemmaService lemmaService;
     private ArrayList<FoundPage> foundPages;
 
     @Autowired
-    public FoundPageService() {
+    public FoundPageService(IndexService indexService, SiteProperties properties, PageService pageService,
+                            LemmaService lemmaService) {
+        this.indexService = indexService;
+        this.properties = properties;
+        this.pageService = pageService;
+        this.lemmaService = lemmaService;
         foundPages = new ArrayList<>();
     }
 
@@ -27,5 +43,26 @@ public class FoundPageService {
 
     public void clearFoundPages() {
         foundPages.clear();
+    }
+
+    public SearchDto getSearchResult(String query, String site, int offset, int limit)
+            throws IOException, InterruptedException {
+        try {
+            clearFoundPages();
+            Search search = new Search(lemmaService, pageService, indexService,
+                    this, properties, query, site);
+            search.start();
+            while (true) {
+                if (search.getFutures().isDone()) {
+                    Thread.sleep(1000);
+                    break;
+                }
+            }
+            ArrayList<FoundPage> fullData = getFoundPages();
+            List<FoundPage> data = fullData.subList(offset, Math.min(fullData.size(), offset + limit));
+            return new SearchDto(data, fullData.size());
+        } catch (NullPointerException e) {
+            return new SearchDto(new ArrayList<>(), 0);
+        }
     }
 }

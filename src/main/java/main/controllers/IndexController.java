@@ -2,7 +2,6 @@ package main.controllers;
 
 import main.dto.ResultDto;
 import main.model.Site;
-import main.model.Status;
 import main.service.*;
 import main.service.parse.Loader;
 import main.service.parse.ParserForOnePage;
@@ -26,27 +25,26 @@ public class IndexController {
     private final PageService pageService;
     private final LemmaService lemmaService;
     private final SiteService siteService;
+    private final StatisticService statisticService;
     private Future<Loader> indexingThread;
     private final ArrayList<Thread> threads = new ArrayList<>();
 
     @Autowired
     public IndexController(IndexService indexService, FieldService fieldService,
-                           PageService pageService, LemmaService lemmaService, SiteService siteService) {
+                           PageService pageService, LemmaService lemmaService,
+                           SiteService siteService, StatisticService statisticService) {
         this.indexService = indexService;
         this.fieldService = fieldService;
         this.pageService = pageService;
         this.lemmaService = lemmaService;
         this.siteService = siteService;
+        this.statisticService = statisticService;
     }
 
     @GetMapping("/startIndexing")
     public ResponseEntity<ResultDto> startIndexing() {
-        ResultDto responseOk = new ResultDto();
-        ArrayList<Site> sites = siteService.getAll();
-        for (Site site: sites) {
-            if (site.getStatus() == Status.INDEXING) {
-                return ResponseEntity.badRequest().body(new ResultDto("Индексация уже запущена"));
-            }
+        if (statisticService.createTotal().getIsIndexing()) {
+            return ResponseEntity.badRequest().body(new ResultDto("Индексация уже запущена"));
         }
         try {
             fieldService.create();
@@ -55,10 +53,10 @@ public class IndexController {
             threads.clear();
             getIndexingThread(siteService.getAll()).get();
         } catch (Exception e) {
-            ResultDto resultDtoError = new ResultDto("Ошибка URL!" + System.lineSeparator() + e.getMessage());
-            return ResponseEntity.internalServerError().body(resultDtoError);
+            return ResponseEntity.internalServerError()
+                    .body(new ResultDto("Ошибка URL!" + System.lineSeparator() + e.getMessage()));
         }
-        return ResponseEntity.ok(responseOk);
+        return ResponseEntity.ok(new ResultDto());
     }
 
     @GetMapping("/stopIndexing")
@@ -79,9 +77,8 @@ public class IndexController {
 
     @PostMapping("/indexPage")
     public ResponseEntity<ResultDto> indexPage(@RequestParam String url) {
-        ResultDto responseOk = new ResultDto();
-        List<String> result= new ArrayList<>();
-        if (url.isEmpty()) return ResponseEntity.internalServerError().body(new ResultDto(
+        List<String> result = new ArrayList<>();
+        if (url.isEmpty()) return ResponseEntity.badRequest().body(new ResultDto(
                 "Задана пустая строка адреса"));
         try {
             ParserForOnePage parser = new ParserForOnePage(fieldService, indexService, pageService,
@@ -91,9 +88,9 @@ public class IndexController {
             ResultDto resultDtoError = new ResultDto("Ошибка" + System.lineSeparator() + e.getMessage());
             return ResponseEntity.internalServerError().body(resultDtoError);
         }
-        if (result.isEmpty()) return ResponseEntity.internalServerError().body(new ResultDto(
+        if (result.isEmpty()) return ResponseEntity.badRequest().body(new ResultDto(
                 "Данная страница находится за пределами сайтов, указанных в конфигурационном файле"));
-        return ResponseEntity.ok(responseOk);
+        return ResponseEntity.ok(new ResultDto());
     }
 
     private Future<Loader> getIndexingThread(List<Site> sites) {
