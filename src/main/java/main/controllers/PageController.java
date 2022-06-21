@@ -27,14 +27,13 @@ public class PageController {
                                  @RequestParam(required = false, defaultValue = "0") int offset,
                                  @RequestParam(required = false, defaultValue = "20") int limit) {
         if (query.isEmpty()) {
-            return ResponseEntity.badRequest().body(new ResultDto("Задан пустой поисковый запрос"));
+            return ResponseEntity.ok().body(new ResultDto("Задан пустой поисковый запрос"));
         }
         try {
             SearchDto searchDto = foundPageService.getSearchResult(query, site, offset, limit);
             return ResponseEntity.ok().body(searchDto);
         } catch (InterruptedException | IOException e) {
-            return ResponseEntity.internalServerError()
-                    .body(new ResultDto("В процессе поиска произошла неизвестная ошибка"));
+            return ResponseEntity.ok().body(new ResultDto("В процессе поиска произошла неизвестная ошибка"));
         }
     }
 }

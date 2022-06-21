@@ -22,7 +22,7 @@ public class StatisticController {
         try {
             return ResponseEntity.ok().body(statisticService.getStatistics());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(
+            return ResponseEntity.ok().body(
                     new ResultDto("При построении статистики произошла неизвестная ошибка:\n" +
                             System.lineSeparator() + e.getMessage()));
         }

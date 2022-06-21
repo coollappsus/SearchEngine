@@ -44,7 +44,7 @@ public class IndexController {
     @GetMapping("/startIndexing")
     public ResponseEntity<ResultDto> startIndexing() {
         if (statisticService.createTotal().getIsIndexing()) {
-            return ResponseEntity.badRequest().body(new ResultDto("Индексация уже запущена"));
+            return ResponseEntity.ok().body(new ResultDto("Индексация уже запущена"));
         }
         try {
             fieldService.create();
@@ -53,7 +53,7 @@ public class IndexController {
             threads.clear();
             getIndexingThread(siteService.getAll()).get();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError()
+            return ResponseEntity.ok()
                     .body(new ResultDto("Ошибка URL!" + System.lineSeparator() + e.getMessage()));
         }
         return ResponseEntity.ok(new ResultDto());
@@ -61,10 +61,8 @@ public class IndexController {
 
     @GetMapping("/stopIndexing")
     public ResponseEntity<ResultDto> stopIndexing() {
-        ResultDto responseOk = new ResultDto();
         if (threads.isEmpty()) {
-            ResultDto error = new ResultDto("Индексация не запущена, либо не может быть завершена!");
-            return ResponseEntity.badRequest().body(error);
+            return ResponseEntity.ok().body(new ResultDto("Индексация не запущена, либо не может быть завершена!"));
         }
         threads.forEach(thread -> {
             if (!thread.isInterrupted()) {
@@ -72,25 +70,23 @@ public class IndexController {
             }
         });
         threads.clear();
-        return ResponseEntity.ok(responseOk);
+        return ResponseEntity.ok(new ResultDto());
     }
 
     @PostMapping("/indexPage")
     public ResponseEntity<ResultDto> indexPage(@RequestParam String url) {
         List<String> result = new ArrayList<>();
-        if (url.isEmpty()) return ResponseEntity.badRequest().body(new ResultDto(
+        if (url.isEmpty()) return ResponseEntity.ok().body(new ResultDto(
                 "Задана пустая строка адреса"));
         try {
             ParserForOnePage parser = new ParserForOnePage(fieldService, indexService, pageService,
                     lemmaService, siteService, url);
             result = parser.parsePage();
-        } catch (Exception e) {
-            ResultDto resultDtoError = new ResultDto("Ошибка" + System.lineSeparator() + e.getMessage());
-            return ResponseEntity.internalServerError().body(resultDtoError);
+        } catch (NullPointerException e) {
+            return ResponseEntity.ok().body(new ResultDto(
+                    "Данная страница находится за пределами сайтов, указанных в конфигурационном файле"));
         }
-        if (result.isEmpty()) return ResponseEntity.badRequest().body(new ResultDto(
-                "Данная страница находится за пределами сайтов, указанных в конфигурационном файле"));
-        return ResponseEntity.ok(new ResultDto());
+        return ResponseEntity.ok().body(new ResultDto());
     }
 
     private Future<Loader> getIndexingThread(List<Site> sites) {
