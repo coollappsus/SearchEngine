@@ -5,13 +5,14 @@
     <img src="https://img.shields.io/badge/Spring-black?style=for-the-badge&logo=Spring" alt="Spring"/>
     <img src="https://img.shields.io/badge/Mysql-black?style=for-the-badge&logo=Mysql" alt="MySQL"/>
 </div>
-
+<h3></h3>
 <h1>Description</h1>
 This project was created for educational purposes to obtain a diploma on the Skillbox educational platform.
 
 <h1>General info</h1>
-The application was created according to the classic MVC structure.
-<div><img src="https://github.com/coollappsus/SearchEngine/blob//assets/UntitledDiagram.drawio.png?raw=true"></div>
+The application was created according to the classic MVC structure. 
+<h4></h4>
+<div><img src="https://github.com/coollappsus/SearchEngine/blob/877dd954d603839d3f5f5e67b2c24e080498f22b/assets/UntitledDiagram.drawio.png"></div>
 <div>
     For the application to work correct, you need a MySQL database, and also register the data in the config
     file(application.yaml):
@@ -95,39 +96,9 @@ The database structure looks like this.
 <h1>Code Examples</h1>
 This type of request/response when loading the start page(Dashboard)
 <h3>Request</h3>
-```
-GET http://localhost:8080/statistics
-Content-Type: application/json
-```
+<div><img src="https://github.com/coollappsus/SearchEngine/blob/main/assets/Request.png?raw=true" width="400"></div>
 <h3>Response</h3>
-```
-{
-    "result": {
-    "result": true,
-    "error": null
-    },
-    "statistics": {
-        "total": {
-        "sites": 4,
-        "pages": 1013,
-        "lemmas": 17018,
-        "isIndexing": false
-        },
-        "detailed": [
-            {
-                "url": "https://nikoartgallery.com",
-                "name": "Галерея Никогосяна",
-                "status": "INDEXED",
-                "statusTime": 1655562762064,
-                "error": "",
-                "pages": 97,
-                "lemmas": 1694
-            },
-            ...
-        ]
-    }
-}
-```
+<div><img src="https://github.com/coollappsus/SearchEngine/blob/main/assets/Response.png?raw=true" width="400"></div>
 <h1>Status</h1>
 Project is: almost finished 😉
 
