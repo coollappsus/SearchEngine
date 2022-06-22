@@ -10,7 +10,7 @@
 This project was created for educational purposes to obtain a diploma on the Skillbox educational platform.
 
 <h1>General info</h1>
-The application was created according to the classic MVC structure. 
+The application was created according to the classic MVC structure.
 <h4></h4>
 <div><img src="https://github.com/coollappsus/SearchEngine/blob/877dd954d603839d3f5f5e67b2c24e080498f22b/assets/UntitledDiagram.drawio.png"></div>
 <div>
