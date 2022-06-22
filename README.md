@@ -10,12 +10,19 @@
 This project was created for educational purposes to obtain a diploma on the Skillbox educational platform.
 
 <h1>General info</h1>
-<!--Нарисовать структуру MVC-->
-<!--Что необходимо иметь для запуска и как запустить-->
+The application was created according to the classic MVC structure.
+<div><img src="https://github.com/coollappsus/SearchEngine/blob//assets/UntitledDiagram.drawio.png?raw=true"></div>
+<div>
+    For the application to work correct, you need a MySQL database, and also register the data in the config
+    file(application.yaml):
+    <ul>
+        <li>The path to the database</li>
+        <li>Database user data (username, password)</li>
+        <li>Sites that need to be indexed (main URL, custom site name)</li>
+    </ul>
+</div>
 
 <h1>About the project</h1>
-<!--Описать функционал подробно со скринами -->
-<!--Возможно приложить структуру БД-->
 I was given a ready-made frontend, my task was to write a backend, and then make friends with them. The functionality
 of the program can be divided into three parts:
 <ul>
@@ -71,29 +78,83 @@ and when you click on the "Find" button, the search results are displayed.
 <div><img src="https://github.com/coollappsus/SearchEngine/blob/main/assets/SearchShowMore.png?raw=true"></div>
 <h3>Correct error responses</h3>
 In case of exceptions, API methods return correct responses.
-
+<div><img src="https://github.com/coollappsus/SearchEngine/blob/main/assets/EmptyQuery.png?raw=true"></div>
+<div><img src="https://github.com/coollappsus/SearchEngine/blob/main/assets/ErrorUrl.png?raw=true"></div>
+<h3>Database</h3>
+The application works with a MySQL database, connection parameters are set in the config.
+The database structure looks like this.
+<div><img src="https://github.com/coollappsus/SearchEngine/blob/main/assets/Database.png?raw=true"></div>
+<!--Написать про рассчёт ранка и релевантности.-->
 
 <h1>Technologies</h1>
-<!--Расписать какие использовались зависимости с версиями-->
 <ul>
     <li>Java - version 17</li>
     <li>Spring boot - version 2.6.7</li>
     <li>MySQL - version 8.0.26</li>
 </ul>
 <h1>Code Examples</h1>
-<!--Сделать скрины, что выводят контроллеры при тех или иных запросах и и ответах-->
-
-<h1>Features</h1>
-<!--Написать особенности, мейби надо удалить-->
-
+This type of request/response when loading the start page(Dashboard)
+<h3>Request</h3>
+```
+GET http://localhost:8080/statistics
+Content-Type: application/json
+```
+<h3>Response</h3>
+```
+{
+    "result": {
+    "result": true,
+    "error": null
+    },
+    "statistics": {
+        "total": {
+        "sites": 4,
+        "pages": 1013,
+        "lemmas": 17018,
+        "isIndexing": false
+        },
+        "detailed": [
+            {
+                "url": "https://nikoartgallery.com",
+                "name": "Галерея Никогосяна",
+                "status": "INDEXED",
+                "statusTime": 1655562762064,
+                "error": "",
+                "pages": 97,
+                "lemmas": 1694
+            },
+            ...
+        ]
+    }
+}
+```
 <h1>Status</h1>
-<!--прописать статус-->
+Project is: almost finished 😉
 
 <h1>Inspiration</h1>
 The project was created for educational purposes.
 
 <h1>Future scope</h1>
-<!--Здесь написать, что можно было бы добавить в дальнейшем, посмотреть доп.задачи в ТЗ-->
+<ul>
+    <li>
+        Implement the output of search results in cases where not all lemmas are found.
+        In this case, output an additional message like "Nothing was found for the ORIGINAL_QUERY.
+        Corrected request: REQUEST".
+    </li>
+    <li>
+        Implement the output of the list of erroneous pages on a separate page.
+    </li>
+    <li>
+        Implement the possibility of separate reindexing of individual sites.
+    </li>
+    <li>
+        To calculate a more accurate relevance value, select the h1 header in a separate field
+        on HTML pages with a weight of 0.9 and ignore its contents in the body.
+    </li>
+    <li>
+        Authorization in the web interface.
+    </li>
+</ul>
 
 <h1>Contact</h1>
 Created by <a href="https://t.me/coollappsus"> Ryzhikov Ivan</a> - feel free to contact me!
