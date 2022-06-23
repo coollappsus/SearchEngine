@@ -33,6 +33,14 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.6.7</version>
     </parent>
+    <repositories>
+        <!--other repositories if any-->
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:${project.basedir}/repo</url>
+        </repository>
+    </repositories>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -63,6 +71,31 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>Lemmatizator</groupId>
+            <artifactId>english</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>Lemmatizator</groupId>
+            <artifactId>russian</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>Lemmatizator</groupId>
+            <artifactId>morphology</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>Lemmatizator</groupId>
+            <artifactId>morph</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>Lemmatizator</groupId>
+            <artifactId>dictionary-reader</artifactId>
+            <version>1.5.0</version>
         </dependency>
     </dependencies>
 

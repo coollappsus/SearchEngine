@@ -29,7 +29,7 @@ public class Search {
     private ArrayList<Page> pageList = new ArrayList<>();
     private TreeMap<Page, Float> pageRelevance = new TreeMap<>(Comparator.comparing(Page::getId));
     private ExecutorService executorService = Executors
-            .newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 5);
+            .newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10);
 
     public Search(LemmaService lemmaService, PageService pageService, IndexService indexService,
                   FoundPageService foundPageService, SiteProperties siteProperties, String searchString, String site) {
