@@ -54,7 +54,6 @@ public class Parser extends RecursiveAction implements Node {
         try {
             if (isCancelled()) {
                 return new ArrayList<>();
-//                throw new CanceledException("Индексация прервана пользователем");
             }
             Thread.sleep(150);
             response = Jsoup.connect(URL)
@@ -88,19 +87,11 @@ public class Parser extends RecursiveAction implements Node {
     protected void compute() {
         ArrayList<String> linksList = new ArrayList<>();
         List<String> links = null;
-//        try {
             if (isCancelled()) {
                 return;
-//                throw new CanceledException("Индексация прервана пользователем");
             } else {
                 links = parsePage();
             }
-//        } catch (CanceledException e) {
-//            StringBuilder error = new StringBuilder();
-//            error.append("Индексация прервана пользователем");
-//            siteService.setSiteStatus(siteService.findByUrl(URL), Status.FAILED, error.toString());
-//            return;
-//        }
         for (String link : links) {
             try {
                 if (!linksList.contains(link) && !WORKED_LINKS.contains(link)) {
@@ -123,17 +114,9 @@ public class Parser extends RecursiveAction implements Node {
     }
 
     private void parseLinks(Document doc) {
-//        try {
             if (isCancelled()) {
                 return;
-//                throw new CanceledException("Индексация прервана пользователем");
             }
-//        } catch (CanceledException e) {
-//            StringBuilder error = new StringBuilder();
-//            error.append("Индексация прервана пользователем");
-//            siteService.setSiteStatus(siteService.findByUrl(URL), Status.FAILED, error.toString());
-//            return;
-//        }
         Elements links = doc.select("a[href]");
         links.forEach(element -> {
             String link = element.attr("abs:href");
@@ -141,8 +124,11 @@ public class Parser extends RecursiveAction implements Node {
                 linksStr.add(link);
             }
         });
-        pageService.create(URL.replaceAll(siteService.findByUrl(URL).getUrl(), ""),
-                response.statusCode(), doc.toString(), siteService.findByUrl(URL));
+        if (pageService.findByURL(URL.replaceAll(siteService.findByUrl(URL).getUrl(), ""),
+                siteService.findByUrl(URL).getId()) == null) {
+            pageService.create(URL.replaceAll(siteService.findByUrl(URL).getUrl(), ""),
+                    response.statusCode(), doc.toString(), siteService.findByUrl(URL));
+        }
     }
 
     private void parseTagField(List<Field> extractFromField, Document doc) throws IOException {
