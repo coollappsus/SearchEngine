@@ -1,11 +1,6 @@
 package main.service.database;
 
-import main.model.Field;
-import main.model.Index;
-import main.model.Lemma;
-import main.model.Page;
-import main.model.Site;
-import main.model.FoundPage;
+import main.model.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
