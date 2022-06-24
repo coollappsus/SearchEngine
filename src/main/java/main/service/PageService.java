@@ -66,20 +66,18 @@ public class PageService {
         return pages.size();
     }
 
-    public Page findByURL (String url, int siteId) throws HibernateException {
+    public synchronized Page findByURL (String url, int siteId) throws HibernateException {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         String sql = "from " + Page.class.getSimpleName()
                 + " p where p.path LIKE :custName AND p.site.id LIKE :custNumber";
-        List<Page> pages = session.createQuery(sql, Page.class)
-                .setParameter("custName", url).setParameter("custNumber", siteId).getResultList();
+        Page page = session.createQuery(sql, Page.class)
+                .setParameter("custName", url).setParameter("custNumber", siteId).uniqueResult();
         session.flush();
         tx1.commit();
         session.close();
-        for (Page page: pages) {
-            if (page.getPath().equals(url)) {
-                return page;
-            }
+        if (page != null) {
+            return page;
         }
         return null;
     }
