@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-mvn clean package
+mvn clean
+mvn package
 
 echo 'Copy files...'
 
@@ -12,7 +13,7 @@ echo 'Restart server...'
 
 ssh -i ~/.ssh/id_rsa coollappsus@84.252.140.163 << EOF
 pgrep java | xargs kill -9
-nohup java -jar earchBot-1.0-SNAPSHOT.jar > log.txt &
+nohup java -jar SearchBot-1.0-SNAPSHOT.jar > log.txt &
 EOF
 
 echo 'Bye'

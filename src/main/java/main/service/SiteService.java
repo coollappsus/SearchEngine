@@ -56,12 +56,11 @@ public class SiteService {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         String sql = "from " + Site.class.getSimpleName() + " s where s.url LIKE :custName";
-        List<Site> sites = session.createQuery(sql, Site.class).setParameter("custName", url).getResultList();
+        Site site = session.createQuery(sql, Site.class).setParameter("custName", url).uniqueResult();
         session.flush();
         tx1.commit();
         session.close();
-        if (sites.isEmpty()) return null;
-        return sites.get(0);
+        return site;
     }
 
     public synchronized void save(Site site) {

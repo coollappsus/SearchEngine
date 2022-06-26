@@ -6,6 +6,9 @@ spring:
 #    url: jdbc:mysql://localhost:3306/search_engine?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
 #    username: root
 #    password: 9511040801
+    .hikari:
+      connection-timeout: 600000
+      maximum-pool-size: 500
   .jpa:
     .hibernate:
       dialect: org.hibernate.dialect.MySQLDialect
@@ -23,6 +26,8 @@ sites:
       name: Радио Милицейская волна
     - url: https://ipfran.ru
       name: Институт прикладной физики
+    - url: https://skillbox.ru
+      name: Образовательная платформа
 connect:
   userAgent: RevivalSearchBot
   refferer: http://www.google.com

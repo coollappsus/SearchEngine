@@ -51,7 +51,7 @@ public class IndexService {
                         pageService.findByURL(shortUrl, siteService.findByUrl(URL).getId()),
                         lemmaRepository.findByLemma(m.getKey()),
                         m.getValue());
-                indexRepository.save(index);
+                save(index);
             }
         }
         session.flush();
@@ -108,6 +108,13 @@ public class IndexService {
         tx1.commit();
         session.close();
         return index;
+    }
+
+    public void save(Index index) {
+        Index indexFromDB = findByIdLemmaAndIdPage(index.getIdLemma(), index.getIdPage());
+        if (indexFromDB == null) {
+            indexRepository.save(index);
+        }
     }
 
 }
