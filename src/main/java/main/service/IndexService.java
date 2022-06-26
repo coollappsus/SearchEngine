@@ -103,12 +103,11 @@ public class IndexService {
                 "index.lemma.id = " + idLemma;
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        List<Index> indexList = session.createQuery(sql, Index.class).getResultList();
+        Index index = session.createQuery(sql, Index.class).uniqueResult();
         session.flush();
         tx1.commit();
         session.close();
-        if (!indexList.isEmpty()) return indexList.get(0);
-        return null;
+        return index;
     }
 
 }

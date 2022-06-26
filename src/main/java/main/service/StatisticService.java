@@ -52,11 +52,10 @@ public class StatisticService {
         int lemmas = session.createQuery(sqlLemmas, Lemma.class).getResultList().size();
         for (SiteProperties.SiteData site: siteData) {
             String url = site.getUrl();
-            List<Site> siteList = session.createQuery(sqlIsIndexing, Site.class).setParameter("custName", url)
-                    .getResultList();
-            if (siteList.isEmpty()) continue;
-            Site site1 = siteList.get(0);
-            isIndexing = site1.getStatus().name().equals("INDEXING");
+            Site siteFromDB = session.createQuery(sqlIsIndexing, Site.class).setParameter("custName", url)
+                    .uniqueResult();
+            if (siteFromDB == null) continue;
+            isIndexing = siteFromDB.getStatus().name().equals("INDEXING");
             if (isIndexing) break;
         }
         session.flush();

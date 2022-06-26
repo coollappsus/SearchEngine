@@ -76,10 +76,7 @@ public class PageService {
         session.flush();
         tx1.commit();
         session.close();
-        if (page != null) {
-            return page;
-        }
-        return null;
+        return page;
     }
 
     public void savePage (Page page) {

@@ -71,8 +71,6 @@ public class SiteService {
         if (foundSite == null) {
             siteRepository.save(site);
         } else {
-//            if (foundSite.getStatus() == Status.FAILED && foundSite.getStatus().toString()
-//                    .equals("Индексация прервана пользователем") && !site.getLastError().isEmpty()) return;
             String sql = "update " + Site.class.getSimpleName() +
                     " s set s.lastError = :custError, s.status = :custStatus, s.statusTime = :custTime" +
                     " where s.id LIKE :custId";

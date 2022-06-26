@@ -49,13 +49,11 @@ public class LemmaService {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         String sql = "from " + Lemma.class.getSimpleName() + " l where l.lemma LIKE :custName";
-        List<Lemma> lemmaList = session.createQuery(sql, Lemma.class).setParameter("custName", lemma)
-                .setMaxResults(1).getResultList();
+        Lemma lemmafromDB = session.createQuery(sql, Lemma.class).setParameter("custName", lemma).uniqueResult();
         session.flush();
         tx1.commit();
         session.close();
-        if (!lemmaList.isEmpty()) return lemmaList.get(0);
-        return null;
+        return lemmafromDB;
     }
 
     public List<Lemma> findByPage (Page page) throws HibernateException {
