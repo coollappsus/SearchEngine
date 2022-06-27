@@ -34,15 +34,15 @@ public class LemmaService {
         this.indexService = indexService;
     }
 
-    public int getCountBySiteId(int siteId) {
+    public Long getCountBySiteId(int siteId) {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        String sql = "from " + Lemma.class.getSimpleName() + " l where l.site.id LIKE :custNumber";
-        List<Lemma> lemmas = session.createQuery(sql, Lemma.class).setParameter("custNumber", siteId).getResultList();
+        String sql = "select count(*) from " + Lemma.class.getSimpleName() + " l where l.site.id LIKE :custNumber";
+        Long countLemmas = (Long) session.createQuery(sql).setParameter("custNumber", siteId).getSingleResult();
         session.flush();
         tx1.commit();
         session.close();
-        return lemmas.size();
+        return countLemmas;
     }
 
     public synchronized Lemma findByLemma (String lemma) throws HibernateException {
@@ -99,8 +99,8 @@ public class LemmaService {
         Transaction tx1 = session.beginTransaction();
         Optional<Site> siteOptional = siteRepository.findById(lemma.getSiteId());
         if (siteOptional.isPresent() && siteOptional.get().getStatus() == Status.INDEXING) {
-            int countPage = indexService.findByIdLemma(lemma.getId()).size();
-            if (countPage >= lemma.getFrequency()) {
+            long countPage = indexService.countByLemma(lemma.getId());
+            if (countPage > lemma.getFrequency()) {
                 lemma.setFrequency(lemma.getFrequency() + 1);
                 session.update(lemma);
             }

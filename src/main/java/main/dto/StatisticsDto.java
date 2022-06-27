@@ -109,10 +109,10 @@ public class StatisticsDto {
         private Status status;
         private Long statusTime;
         private String error;
-        private int pages;
-        private int lemmas;
+        private Long pages;
+        private Long lemmas;
 
-        public Detailed(String url, String name, Status status, Long statusTime, String error, int pages, int lemmas) {
+        public Detailed(String url, String name, Status status, Long statusTime, String error, Long pages, Long lemmas) {
             this.url = url;
             this.name = name;
             this.status = status;
@@ -162,19 +162,19 @@ public class StatisticsDto {
             this.error = error;
         }
 
-        public int getPages() {
+        public Long getPages() {
             return pages;
         }
 
-        public void setPages(int pages) {
+        public void setPages(Long pages) {
             this.pages = pages;
         }
 
-        public int getLemmas() {
+        public Long getLemmas() {
             return lemmas;
         }
 
-        public void setLemmas(int lemmas) {
+        public void setLemmas(Long lemmas) {
             this.lemmas = lemmas;
         }
     }

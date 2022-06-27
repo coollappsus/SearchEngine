@@ -66,8 +66,8 @@ public class StatisticService {
 
     public StatisticsDto.Detailed createDetailed(Site site) {
         int siteId = site.getId();
-        int pagesCount = pageService.getCountBySiteId(siteId);
-        int lemmasCount = lemmaService.getCountBySiteId(siteId);
+        Long pagesCount = pageService.getCountBySiteId(siteId);
+        Long lemmasCount = lemmaService.getCountBySiteId(siteId);
         return new StatisticsDto.Detailed(site.getUrl(), site.getName(), (Status) site.getStatus(),
                 site.getStatusTime(), site.getLastError(), pagesCount, lemmasCount);
     }

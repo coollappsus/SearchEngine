@@ -100,7 +100,7 @@ This type of request/response when loading the start page(Dashboard)
 <h3>Response</h3>
 <div><img src="https://github.com/coollappsus/SearchEngine/blob/main/assets/Response.png?raw=true" width="400"></div>
 <h1>Status</h1>
-Project is: almost finished 😉
+Project is: finished 😉
 
 <h1>Inspiration</h1>
 The project was created for educational purposes.

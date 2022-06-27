@@ -6,6 +6,8 @@ spring:
 #    url: jdbc:mysql://localhost:3306/search_engine?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
 #    username: root
 #    password: 9511040801
+    .testWhileIdle: true
+    .validationQuery: SELECT 1
     .hikari:
       connection-timeout: 600000
       maximum-pool-size: 500

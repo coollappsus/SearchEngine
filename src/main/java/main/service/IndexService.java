@@ -117,4 +117,15 @@ public class IndexService {
         }
     }
 
+    public Long countByLemma(int lemmaId) {
+        String sql = "select count(*) from " + Index.class.getSimpleName() + " index where index.lemma.id LIKE :custName";
+        Session session = sessionFactory.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        Long countIndex = (Long) session.createQuery(sql).setParameter("custName", lemmaId).getSingleResult();
+        session.flush();
+        tx1.commit();
+        session.close();
+        return countIndex;
+    }
+
 }

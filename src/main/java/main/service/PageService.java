@@ -55,15 +55,15 @@ public class PageService {
         return optionalPage.orElse(null);
     }
 
-    public int getCountBySiteId(int siteId) {
+    public Long getCountBySiteId(int siteId) {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        String sql = "from " + Page.class.getSimpleName() + " p where p.site.id LIKE :custNumber";
-        List<Page> pages = session.createQuery(sql, Page.class).setParameter("custNumber", siteId).getResultList();
+        String sql = "select count(*) from " + Page.class.getSimpleName() + " p where p.site.id LIKE :custNumber";
+        Long countPages = (Long) session.createQuery(sql).setParameter("custNumber", siteId).getSingleResult();
         session.flush();
         tx1.commit();
         session.close();
-        return pages.size();
+        return countPages;
     }
 
     public synchronized Page findByURL (String url, int siteId) throws HibernateException {
