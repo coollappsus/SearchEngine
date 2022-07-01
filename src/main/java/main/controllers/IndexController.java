@@ -27,7 +27,7 @@ public class IndexController {
     private final SiteService siteService;
     private final StatisticService statisticService;
     private Future<Loader> indexingThread;
-    private final ArrayList<Thread> threads = new ArrayList<>();
+    private final ArrayList<Thread> threads;
 
     @Autowired
     public IndexController(IndexService indexService, FieldService fieldService,
@@ -39,6 +39,8 @@ public class IndexController {
         this.lemmaService = lemmaService;
         this.siteService = siteService;
         this.statisticService = statisticService;
+
+        threads = new ArrayList<>();
     }
 
     @GetMapping("/startIndexing")

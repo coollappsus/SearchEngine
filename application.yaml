@@ -26,10 +26,8 @@ sites:
       name: Музей-театр
     - url: http://radiomv.ru
       name: Радио Милицейская волна
-    - url: https://ipfran.ru
-      name: Институт прикладной физики
-    - url: https://skillbox.ru
-      name: Образовательная платформа
+    - url: http://www.playback.ru
+      name: Интернет-магазин
 connect:
   userAgent: RevivalSearchBot
   refferer: http://www.google.com

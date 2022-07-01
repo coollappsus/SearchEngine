@@ -1,19 +1,16 @@
 package main.service.parse;
 
-import main.service.database.DBConnection;
-import main.service.exception.CanceledException;
-import main.service.exception.StatusCodeException;
-import main.model.*;
 import main.controllers.properties.ConnectProperties;
+import main.model.Field;
+import main.model.Status;
 import main.service.*;
-import org.hibernate.SessionFactory;
-import org.jsoup.nodes.Document;
+import main.service.exception.StatusCodeException;
 import main.utils.LemmatizatorForParsing;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -25,18 +22,17 @@ public class Parser extends RecursiveAction implements Node {
     private final PageService pageService;
     private final LemmaService lemmaService;
     private final SiteService siteService;
-    private volatile boolean isCanceled = false;
-    private List<Parser> tasks = new ArrayList<>();
+    private final List<Parser> tasks;
     private final String URL;
-    private String userAgent = ConnectProperties.getUserAgent();
-    private String referrer = ConnectProperties.getRefferer();
-    private final CopyOnWriteArrayList WORKED_LINKS;
+    private final String userAgent;
+    private final String referrer;
+    private final CopyOnWriteArrayList<String> WORKED_LINKS;
     private Set<String> linksStr;
     private Connection.Response response;
 
     public Parser(FieldService fieldService, IndexService indexService, PageService pageService,
                   LemmaService lemmaService, SiteService siteService, String url,
-                  CopyOnWriteArrayList workedLinks) {
+                  CopyOnWriteArrayList<String> workedLinks) {
         this.fieldService = fieldService;
         this.indexService = indexService;
         this.pageService = pageService;
@@ -44,6 +40,10 @@ public class Parser extends RecursiveAction implements Node {
         this.siteService = siteService;
         this.URL = url;
         this.WORKED_LINKS = workedLinks;
+
+        tasks = new ArrayList<>();
+        userAgent = ConnectProperties.getUserAgent();
+        referrer = ConnectProperties.getRefferer();
     }
 
     @Override
@@ -131,7 +131,7 @@ public class Parser extends RecursiveAction implements Node {
         }
     }
 
-    private void parseTagField(List<Field> extractFromField, Document doc) throws IOException {
+    public void parseTagField(List<Field> extractFromField, Document doc) throws IOException {
         String textTitle = doc.select(extractFromField.get(0).getSelector()).text();
         String textBody = doc.select(extractFromField.get(1).getSelector()).text();
         LemmatizatorForParsing lemmaTitle = new LemmatizatorForParsing(lemmaService, siteService, textTitle, URL);
@@ -144,11 +144,6 @@ public class Parser extends RecursiveAction implements Node {
 
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
-        return isCanceled = mayInterruptIfRunning;
+        return mayInterruptIfRunning;
     }
-
-//    public void closeConnectDB() {
-//        sessionFactory.getCurrentSession().flush();
-//        sessionFactory.close();
-//    }
 }

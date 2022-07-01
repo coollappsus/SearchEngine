@@ -13,10 +13,10 @@ public class Loader extends Thread {
     private final PageService pageService;
     private final LemmaService lemmaService;
     private final SiteService siteService;
-    private boolean isCanceled = false;
-    private ForkJoinPool pool = new ForkJoinPool();
-    private Site site;
+    private final ForkJoinPool pool;
+    private final Site site;
     private Parser processor;
+    private boolean isCanceled;
 
     public Loader(IndexService indexService, FieldService fieldService, PageService pageService,
                   LemmaService lemmaService, SiteService siteService, Site site) {
@@ -26,6 +26,9 @@ public class Loader extends Thread {
         this.lemmaService = lemmaService;
         this.siteService = siteService;
         this.site = site;
+
+        pool = new ForkJoinPool();
+        isCanceled = false;
     }
 
 
@@ -33,7 +36,7 @@ public class Loader extends Thread {
     public void run() {
         try {
             siteService.setSiteStatus(site, Status.INDEXING, "");
-            CopyOnWriteArrayList workedLink = new CopyOnWriteArrayList();
+            CopyOnWriteArrayList<String> workedLink = new CopyOnWriteArrayList<>();
             workedLink.add(site.getUrl());
             processor = new Parser(fieldService, indexService, pageService,
                     lemmaService, siteService, site.getUrl(), workedLink);
@@ -45,8 +48,7 @@ public class Loader extends Thread {
                 siteService.setSiteStatus(site, Status.INDEXED, "");
             }
         } catch (Exception e) {
-            StringBuilder error = new StringBuilder();
-            error.append(e.getMessage());
+            StringBuilder error = new StringBuilder(e.getMessage());
             siteService.setSiteStatus(site, Status.FAILED, error.toString());
         }
     }
@@ -57,6 +59,5 @@ public class Loader extends Thread {
         isCanceled = true;
         pool.shutdownNow();
         processor.cancel(true);
-        //siteService.setSiteStatus(site, Status.FAILED, "Индексация прервана пользователем");
     }
 }

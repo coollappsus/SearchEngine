@@ -1,12 +1,10 @@
 package main.service;
 
 import main.controllers.properties.SiteProperties;
-import main.dto.ResultDto;
 import main.dto.SearchDto;
 import main.model.FoundPage;
 import main.service.search.Search;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,7 +18,7 @@ public class FoundPageService {
     private final SiteProperties properties;
     private final PageService pageService;
     private final LemmaService lemmaService;
-    private ArrayList<FoundPage> foundPages;
+    private final ArrayList<FoundPage> foundPages;
 
     @Autowired
     public FoundPageService(IndexService indexService, SiteProperties properties, PageService pageService,
@@ -50,7 +48,7 @@ public class FoundPageService {
         try {
             clearFoundPages();
             Search search = new Search(lemmaService, pageService, indexService,
-                    this, properties, query, site);
+                    this, properties, query, site, offset, limit);
             search.start();
             while (true) {
                 if (search.getFutures().isDone()) {
@@ -58,9 +56,10 @@ public class FoundPageService {
                     break;
                 }
             }
-            ArrayList<FoundPage> fullData = getFoundPages();
-            List<FoundPage> data = fullData.subList(offset, Math.min(fullData.size(), offset + limit));
-            return new SearchDto(data, fullData.size());
+            ArrayList<FoundPage> data = getFoundPages();
+//            ArrayList<FoundPage> fullData = getFoundPages();
+//            List<FoundPage> data = fullData.subList(offset, Math.min(fullData.size(), offset + limit));
+            return new SearchDto(data, search.getPageList().size());
         } catch (NullPointerException e) {
             return new SearchDto(new ArrayList<>(), 0);
         }

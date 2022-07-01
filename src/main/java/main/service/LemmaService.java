@@ -45,15 +45,15 @@ public class LemmaService {
         return countLemmas;
     }
 
-    public synchronized Lemma findByLemma (String lemma) throws HibernateException {
+    public Lemma findByLemma (String lemma) throws HibernateException {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         String sql = "from " + Lemma.class.getSimpleName() + " l where l.lemma LIKE :custName";
-        Lemma lemmafromDB = session.createQuery(sql, Lemma.class).setParameter("custName", lemma).uniqueResult();
+        Lemma lemmaFromDB = session.createQuery(sql, Lemma.class).setParameter("custName", lemma).uniqueResult();
         session.flush();
         tx1.commit();
         session.close();
-        return lemmafromDB;
+        return lemmaFromDB;
     }
 
     public List<Lemma> findByPage (Page page) throws HibernateException {
@@ -74,7 +74,7 @@ public class LemmaService {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         String sql = "select max(frequency) from " + Lemma.class.getSimpleName();
-        List maxValue = session.createQuery(sql).getResultList();
+        List<?> maxValue = session.createQuery(sql).getResultList();
         String max = maxValue.get(0).toString();
         session.flush();
         tx1.commit();

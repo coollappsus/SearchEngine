@@ -39,16 +39,17 @@ public class IndexService {
         this.siteService = siteService;
     }
 
-    public synchronized void create(TreeMap<String, Float> lemmaRank, Connection.Response response,
+    public void create(TreeMap<String, Float> lemmaRank, Connection.Response response,
                        String URL) throws HibernateException {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         for(Map.Entry<String, Float> m: lemmaRank.entrySet()) {
             if (response.statusCode() == 200 && siteService.findByUrl(URL).getStatus() == Status.INDEXING) {
-                String shortUrl = URL.replaceAll(siteService.findByUrl(URL).getUrl(), "");
-                if (shortUrl.equals("")) {shortUrl = "/";}
+                StringBuffer shortUrl = new StringBuffer(URL.replaceAll(siteService
+                        .findByUrl(URL).getUrl(), ""));
+                if (shortUrl.isEmpty()) {shortUrl.append("/");}
                 Index index = new Index(
-                        pageService.findByURL(shortUrl, siteService.findByUrl(URL).getId()),
+                        pageService.findByURL(shortUrl.toString(), siteService.findByUrl(URL).getId()),
                         lemmaRepository.findByLemma(m.getKey()),
                         m.getValue());
                 save(index);

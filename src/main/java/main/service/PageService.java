@@ -66,7 +66,7 @@ public class PageService {
         return countPages;
     }
 
-    public synchronized Page findByURL (String url, int siteId) throws HibernateException {
+    public Page findByURL (String url, int siteId) throws HibernateException {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         String sql = "from " + Page.class.getSimpleName()
@@ -89,11 +89,16 @@ public class PageService {
     }
 
     public void deleteAllInformation() {
+        Session session = sessionFactory.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
         List<String> urls = siteProperties.getList().stream().map(SiteProperties.SiteData::getUrl).toList();
         for (String url: urls) {
             indexRepository.deleteAllNotIn(url);
             lemmaRepository.deleteAllNotIn(url);
             pageRepository.deleteAllNotIn(url);
         }
+        session.flush();
+        tx1.commit();
+        session.close();
     }
 }

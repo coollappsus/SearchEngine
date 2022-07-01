@@ -21,8 +21,8 @@ public class ParserForOnePage implements Node{
     private final LemmaService lemmaService;
     private final SiteService siteService;
     private final String URL;
-    private String userAgent = ConnectProperties.getUserAgent();
-    private String referrer = ConnectProperties.getRefferer();
+    private final String userAgent;
+    private final String referrer;
     private Connection.Response response;
 
     public ParserForOnePage(FieldService fieldService, IndexService indexService, PageService pageService,
@@ -33,6 +33,9 @@ public class ParserForOnePage implements Node{
         this.lemmaService = lemmaService;
         this.siteService = siteService;
         this.URL = url;
+
+        userAgent = ConnectProperties.getUserAgent();
+        referrer = ConnectProperties.getRefferer();
     }
 
 
@@ -61,7 +64,7 @@ public class ParserForOnePage implements Node{
         return result;
     }
 
-    private void parseTagField(List<Field> extractFromField, Document doc) throws IOException {
+    public void parseTagField(List<Field> extractFromField, Document doc) throws IOException {
         String textTitle = doc.select(extractFromField.get(0).getSelector()).text();
         String textBody = doc.select(extractFromField.get(1).getSelector()).text();
         LemmatizatorForParsing lemmaTitle = new LemmatizatorForParsing(lemmaService, siteService, textTitle, URL);
