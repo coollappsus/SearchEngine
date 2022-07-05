@@ -16,7 +16,7 @@ public class Loader extends Thread {
     private final ForkJoinPool pool;
     private final Site site;
     private Parser processor;
-    private boolean isCanceled;
+    private boolean isCancelled;
 
     public Loader(IndexService indexService, FieldService fieldService, PageService pageService,
                   LemmaService lemmaService, SiteService siteService, Site site) {
@@ -28,7 +28,7 @@ public class Loader extends Thread {
         this.site = site;
 
         pool = new ForkJoinPool();
-        isCanceled = false;
+        isCancelled = false;
     }
 
 
@@ -42,7 +42,7 @@ public class Loader extends Thread {
                     lemmaService, siteService, site.getUrl(), workedLink);
             pool.execute(processor);
             processor.join();
-            if (siteService.findByUrl(site.getUrl()).getStatus() == Status.INDEXING && isCanceled) {
+            if (siteService.findByUrl(site.getUrl()).getStatus() == Status.INDEXING && isCancelled) {
                 siteService.setSiteStatus(site, Status.FAILED, "Индексация прервана пользователем");
             } else {
                 siteService.setSiteStatus(site, Status.INDEXED, "");
@@ -56,7 +56,7 @@ public class Loader extends Thread {
     @Override
     public void interrupt() {
         if (processor == null) return;
-        isCanceled = true;
+        isCancelled = true;
         pool.shutdownNow();
         processor.cancel(true);
     }

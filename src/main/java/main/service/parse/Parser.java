@@ -29,6 +29,7 @@ public class Parser extends RecursiveAction implements Node {
     private final CopyOnWriteArrayList<String> WORKED_LINKS;
     private Set<String> linksStr;
     private Connection.Response response;
+    private boolean isCancelled;
 
     public Parser(FieldService fieldService, IndexService indexService, PageService pageService,
                   LemmaService lemmaService, SiteService siteService, String url,
@@ -44,6 +45,7 @@ public class Parser extends RecursiveAction implements Node {
         tasks = new ArrayList<>();
         userAgent = ConnectProperties.getUserAgent();
         referrer = ConnectProperties.getRefferer();
+        isCancelled = false;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class Parser extends RecursiveAction implements Node {
         linksStr = new HashSet<>();
         Document doc = null;
         try {
-            if (isCancelled()) {
+            if (isCancelled) {
                 return new ArrayList<>();
             }
             Thread.sleep(150);
@@ -87,15 +89,14 @@ public class Parser extends RecursiveAction implements Node {
     protected void compute() {
         ArrayList<String> linksList = new ArrayList<>();
         List<String> links = null;
-            if (isCancelled()) {
+            if (isCancelled) {
                 return;
             } else {
                 links = parsePage();
             }
         for (String link : links) {
             try {
-                if (!linksList.contains(link) && !WORKED_LINKS.contains(link)) {
-                    if (isCancelled()) return;
+                if (!linksList.contains(link) && !WORKED_LINKS.contains(link) && !isCancelled) {
                     linksList.add(link);
                     WORKED_LINKS.add(link);
                     Parser task = new Parser(fieldService, indexService, pageService, lemmaService, siteService,
@@ -143,7 +144,12 @@ public class Parser extends RecursiveAction implements Node {
     }
 
     @Override
-    public boolean cancel(boolean mayInterruptIfRunning) {
-        return mayInterruptIfRunning;
+    public boolean cancel(boolean isCanceled) {
+        return this.isCancelled = isCanceled;
     }
+
+//    @Override
+//    public boolean cancel(boolean mayInterruptIfRunning) {
+//        return mayInterruptIfRunning;
+//    }
 }

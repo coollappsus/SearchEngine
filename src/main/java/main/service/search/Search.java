@@ -89,8 +89,8 @@ public class Search {
             pageIds.forEach(integer -> pageList.add(pageService.findById(integer)));
             if (site != null) pageList.removeIf(page -> !page.getSite().getUrl().contains(site));
             calculatingRelevance();
-            createFoundPageList();
         }
+        if (!pageRelevance.isEmpty()) createFoundPageList();
     }
 
     private void calculatingRelevance() {
@@ -102,10 +102,12 @@ public class Search {
                 }
             }
         }
-        float maxAbsRelevance = pageRelevance.values().stream().max(Float::compare).get();
-        for (Map.Entry<Page, Float> p: pageRelevance.entrySet()) {
-            float resultRelevance = p.getValue() / maxAbsRelevance;
-            pageRelevance.replace(p.getKey(), p.getValue(), resultRelevance);
+        float maxAbsRelevance = pageRelevance.values().stream().max(Float::compare).isPresent() ?
+                pageRelevance.values().stream().max(Float::compare).get() : 0;
+        for (Map.Entry<Page, Float> p : pageRelevance.entrySet()) {
+            float resultRelevance = maxAbsRelevance == 0 ? 0 : p.getValue() / maxAbsRelevance;
+            if (resultRelevance == 0) pageRelevance.clear();
+            else pageRelevance.replace(p.getKey(), p.getValue(), resultRelevance);
         }
     }
 
