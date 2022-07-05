@@ -81,7 +81,7 @@ public class PageService {
 
     public void savePage (Page page) {
         Optional<Site> siteOptional = siteRepository.findById(page.getSiteId());
-        if (siteOptional.isPresent() && siteOptional.get().getStatus() == Status.INDEXING) {
+        if (siteOptional.isPresent()) {
             siteOptional.get().setStatusTime(System.currentTimeMillis());
             siteRepository.save(siteOptional.get());
             pageRepository.save(page);

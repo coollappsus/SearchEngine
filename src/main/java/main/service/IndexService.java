@@ -44,7 +44,7 @@ public class IndexService {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         for(Map.Entry<String, Float> m: lemmaRank.entrySet()) {
-            if (response.statusCode() == 200 && siteService.findByUrl(URL).getStatus() == Status.INDEXING) {
+            if (response.statusCode() == 200) {
                 StringBuffer shortUrl = new StringBuffer(URL.replaceAll(siteService
                         .findByUrl(URL).getUrl(), ""));
                 if (shortUrl.isEmpty()) {shortUrl.append("/");}

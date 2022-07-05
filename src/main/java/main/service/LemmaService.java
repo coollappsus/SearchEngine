@@ -86,7 +86,7 @@ public class LemmaService {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         Optional<Site> siteOptional = siteRepository.findById(lemma.getSiteId());
-        if (siteOptional.isPresent() && siteOptional.get().getStatus() == Status.INDEXING) {
+        if (siteOptional.isPresent()) {
             lemmaRepository.save(lemma);
         }
         session.flush();
@@ -98,7 +98,7 @@ public class LemmaService {
         Session session = sessionFactory.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         Optional<Site> siteOptional = siteRepository.findById(lemma.getSiteId());
-        if (siteOptional.isPresent() && siteOptional.get().getStatus() == Status.INDEXING) {
+        if (siteOptional.isPresent()) {
             long countPage = indexService.countByLemma(lemma.getId());
             if (countPage > lemma.getFrequency()) {
                 lemma.setFrequency(lemma.getFrequency() + 1);
