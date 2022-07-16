@@ -7,7 +7,7 @@
 </div>
 <h3></h3>
 <h1>Description</h1>
-This project was created for educational purposes to obtain a diploma on the Skillbox educational platform.
+This project was created for a deep study of the Spring framework and multithreading. And also in order to study the deploy on Yandex cloud.
 
 <h1>General info</h1>
 The application was created according to the classic MVC structure.
