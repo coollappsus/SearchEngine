@@ -47,11 +47,14 @@ public class IndexService {
             if (response.statusCode() == 200) {
                 StringBuffer shortUrl = new StringBuffer(URL.replaceAll(siteService
                         .findByUrl(URL).getUrl(), ""));
-                if (shortUrl.isEmpty()) {shortUrl.append("/");}
+                if (shortUrl.isEmpty()) {
+                    shortUrl.append("/");
+                }
                 Index index = new Index(
                         pageService.findByURL(shortUrl.toString(), siteService.findByUrl(URL).getId()),
                         lemmaRepository.findByLemma(m.getKey()),
-                        m.getValue());
+                        m.getValue()
+                );
                 save(index);
             }
         }

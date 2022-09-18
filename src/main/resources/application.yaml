@@ -1,16 +1,16 @@
 spring:
   .datasource:
-    .url: jdbc:mysql://rc1b-0jxb91ubshr2u7p1.mdb.yandexcloud.net:3306/search_engine?allowPublicKeyRetrieval=true&useSSL=true
-    .username: rootUser
-    .password: subjik-wembuf-dazRy3
-#    url: jdbc:mysql://localhost:3306/search_engine?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-#    username: root
-#    password: 9511040801
-    .testWhileIdle: true
-    .validationQuery: SELECT 1
-    .hikari:
-      connection-timeout: 600000
-      maximum-pool-size: 500
+#    .url: jdbc:mysql://rc1b-0jxb91ubshr2u7p1.mdb.yandexcloud.net:3306/search_engine?allowPublicKeyRetrieval=true&useSSL=true
+#    .username: rootUser
+#    .password: subjik-wembuf-dazRy3
+    url: jdbc:mysql://localhost:3306/search_engine?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 9511040801
+#    .testWhileIdle: true
+#    .validationQuery: SELECT 1
+#    .hikari:
+#      connection-timeout: 600000
+#      maximum-pool-size: 500
   .jpa:
     .hibernate:
       dialect: org.hibernate.dialect.MySQLDialect

@@ -5,12 +5,12 @@
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="connection.driver-class-name">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://rc1b-0jxb91ubshr2u7p1.mdb.yandexcloud.net:3306/search_engine?allowPublicKeyRetrieval=true&amp;useSSL=true</property>
-        <property name="connection.username">rootUser</property>
-        <property name="connection.password">subjik-wembuf-dazRy3</property>
-<!--        <property name="connection.url">jdbc:mysql://localhost:3306/search_engine?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=UTC</property>-->
-<!--        <property name="connection.username">root</property>-->
-<!--        <property name="connection.password">9511040801</property>-->
+<!--        <property name="connection.url">jdbc:mysql://rc1b-0jxb91ubshr2u7p1.mdb.yandexcloud.net:3306/search_engine?allowPublicKeyRetrieval=true&amp;useSSL=true</property>-->
+<!--        <property name="connection.username">rootUser</property>-->
+<!--        <property name="connection.password">subjik-wembuf-dazRy3</property>-->
+        <property name="connection.url">jdbc:mysql://localhost:3306/search_engine?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=UTC</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">9511040801</property>
         <!-- JDBC connection pool settings ... using built-in test pool -->
         <property name="connection.pool_size">10</property>
         <!-- Select our SQL dialect -->
